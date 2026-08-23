@@ -1,0 +1,6 @@
+{
+  "name": "Laboratorium Nenek Kebayan",
+  "description": "Media pembelajaran interaktif Kimia SMA Kelas XI tentang Konsentrasi & Titrasi berbalut kisah dan konsultasi AI Nenek Kebayan.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
