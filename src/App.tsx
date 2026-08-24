@@ -15,6 +15,8 @@ import { CompletionScreen } from './components/CompletionScreen';
 import { RecipeBookModal } from './components/RecipeBookModal';
 import { MissionSuccessModal } from './components/MissionSuccessModal';
 import { FocusLostAlert } from './components/FocusLostAlert';
+import { GoogleSheetsModal } from './components/GoogleSheetsModal';
+import { BackgroundMap } from './components/BackgroundMap';
 
 const STORAGE_KEY = 'NENEK_KEBAYAN_LAB_PROGRESS_V1';
 
@@ -45,6 +47,7 @@ export default function App() {
   const [currentScreen, setCurrentScreen] = useState<ScreenState>('HOME');
   const [activeMissionId, setActiveMissionId] = useState<number>(1);
   const [isRecipeBookOpen, setIsRecipeBookOpen] = useState<boolean>(false);
+  const [isSheetsModalOpen, setIsSheetsModalOpen] = useState<boolean>(false);
   const [successModalData, setSuccessModalData] = useState<{
     isOpen: boolean;
     missionId: number;
@@ -189,30 +192,40 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F4EDE2] text-[#3D2413] flex flex-col font-sans selection:bg-[#D9A441] selection:text-[#3D2413]">
-      {/* Fair-play Focus Loss Detection & Gentle Chime */}
-      <FocusLostAlert
-        activeScreen={currentScreen}
-        onFocusChange={(isFocused) => setIsTabPaused(!isFocused)}
-      />
+    <div className="min-h-screen relative text-[#3D2413] flex flex-col font-sans selection:bg-[#D9A441] selection:text-[#3D2413] overflow-x-hidden">
+      {/* Peta Pencaharian Misi Nenek Kebayan - Universal Fixed Background */}
+      <BackgroundMap />
 
-      {/* Top Application Navbar */}
-      <Navbar
-        studentName={progress.studentName}
-        completedMissionsCount={progress.completedMissions.length}
-        onOpenRecipeBook={() => setIsRecipeBookOpen(true)}
-        onGoHome={() => setCurrentScreen('HOME')}
-        showHomeButton={currentScreen !== 'HOME'}
-      />
+      {/* Global Translucent Ambient Veil for Optimal Content Legibility */}
+      <div className="fixed inset-0 bg-[#F4EDE2]/45 pointer-events-none z-0 backdrop-blur-[1px]" />
 
-      {/* Main Screen Content */}
-      <main className="flex-1 pb-12">
+      {/* Main Foreground Container */}
+      <div className="relative z-10 flex flex-col min-h-screen">
+        {/* Fair-play Focus Loss Detection & Gentle Chime */}
+        <FocusLostAlert
+          activeScreen={currentScreen}
+          onFocusChange={(isFocused) => setIsTabPaused(!isFocused)}
+        />
+
+        {/* Top Application Navbar */}
+        <Navbar
+          studentName={progress.studentName}
+          completedMissionsCount={progress.completedMissions.length}
+          onOpenRecipeBook={() => setIsRecipeBookOpen(true)}
+          onOpenSheetsModal={() => setIsSheetsModalOpen(true)}
+          onGoHome={() => setCurrentScreen('HOME')}
+          showHomeButton={currentScreen !== 'HOME'}
+        />
+
+        {/* Main Screen Content */}
+        <main className="flex-1 pb-12">
         {currentScreen === 'HOME' && (
           <HomeScreen
             progress={progress}
             onUpdateName={handleUpdateName}
             onSelectMission={handleSelectMission}
             onOpenRecipeBook={() => setIsRecipeBookOpen(true)}
+            onOpenSheetsModal={() => setIsSheetsModalOpen(true)}
             onOpenCompletionSummary={() => setCurrentScreen('ALL_COMPLETED')}
           />
         )}
@@ -253,6 +266,7 @@ export default function App() {
             progress={progress}
             onRestartAll={handleRestartAll}
             onGoHome={() => setCurrentScreen('HOME')}
+            onOpenSheetsModal={() => setIsSheetsModalOpen(true)}
           />
         )}
       </main>
@@ -282,6 +296,14 @@ export default function App() {
         progress={progress}
         onClose={() => setIsRecipeBookOpen(false)}
       />
+
+      {/* Google Sheets Modal */}
+      <GoogleSheetsModal
+        isOpen={isSheetsModalOpen}
+        progress={progress}
+        onClose={() => setIsSheetsModalOpen(false)}
+      />
+      </div>
     </div>
   );
 }

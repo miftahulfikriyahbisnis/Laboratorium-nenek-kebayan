@@ -3,7 +3,7 @@ import { MISSIONS } from '../data/missionsData';
 import { StudentProgress } from '../types';
 import { NenekAvatar } from './NenekAvatar';
 import { MissionMap } from './MissionMap';
-import { Play, Lock, CheckCircle2, BookOpen, Sparkles, User, Award, Flame, Map, LayoutGrid } from 'lucide-react';
+import { Play, Lock, CheckCircle2, BookOpen, Sparkles, User, Award, Flame, Map, LayoutGrid, FileSpreadsheet } from 'lucide-react';
 import { soundManager } from '../utils/audio';
 
 interface HomeScreenProps {
@@ -11,6 +11,7 @@ interface HomeScreenProps {
   onUpdateName: (name: string) => void;
   onSelectMission: (missionId: number) => void;
   onOpenRecipeBook: () => void;
+  onOpenSheetsModal?: () => void;
   onOpenCompletionSummary?: () => void;
 }
 
@@ -19,6 +20,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   onUpdateName,
   onSelectMission,
   onOpenRecipeBook,
+  onOpenSheetsModal,
   onOpenCompletionSummary,
 }) => {
   const [nameInput, setNameInput] = useState(progress.studentName);
@@ -62,7 +64,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       </div>
 
       {/* Hero Welcome Card */}
-      <div className="relative z-10 overflow-hidden rounded-3xl wood-texture text-[#FAF7F0] p-6 sm:p-8 gold-border glow shadow-2xl">
+      <div className="relative z-10 overflow-hidden rounded-3xl bg-[#5C3A21]/85 backdrop-blur-md text-[#FAF7F0] p-6 sm:p-8 gold-border glow shadow-2xl">
         <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-[#D9A441]/15 blur-2xl pointer-events-none" />
         <div className="absolute -bottom-12 -left-12 w-48 h-48 rounded-full bg-[#5C7A5C]/30 blur-2xl pointer-events-none" />
 
@@ -110,14 +112,29 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             />
           </div>
 
-          <button
-            id="btn-open-recipe-book-home"
-            onClick={onOpenRecipeBook}
-            className="px-5 py-3 rounded-2xl bg-[#D9A441] hover:bg-yellow-500 text-[#7A5230] font-black text-sm border-2 border-[#FAF7F0]/40 flex items-center justify-center gap-2 shadow-lg transition active:scale-95 cursor-pointer"
-          >
-            <BookOpen className="w-4 h-4 text-[#7A5230]" />
-            <span>Buku Resep ({progress.completedMissions.length}/4)</span>
-          </button>
+          <div className="flex items-center gap-2">
+            {onOpenSheetsModal && (
+              <button
+                id="btn-open-google-sheets-home"
+                onClick={onOpenSheetsModal}
+                className="px-4 py-3 rounded-2xl bg-[#2E7D32] hover:bg-[#1B5E20] text-[#FAF7F0] font-black text-sm border-2 border-[#FAF7F0]/40 flex items-center justify-center gap-2 shadow-lg transition active:scale-95 cursor-pointer"
+                title="Buka / Hubungkan Google Sheets Rekapitulasi Siswa"
+              >
+                <FileSpreadsheet className="w-4 h-4 text-[#FAF7F0]" />
+                <span className="hidden sm:inline">Rekap Nilai Guru (Sheets)</span>
+                <span className="sm:hidden">Sheets</span>
+              </button>
+            )}
+
+            <button
+              id="btn-open-recipe-book-home"
+              onClick={onOpenRecipeBook}
+              className="px-5 py-3 rounded-2xl bg-[#D9A441] hover:bg-yellow-500 text-[#7A5230] font-black text-sm border-2 border-[#FAF7F0]/40 flex items-center justify-center gap-2 shadow-lg transition active:scale-95 cursor-pointer"
+            >
+              <BookOpen className="w-4 h-4 text-[#7A5230]" />
+              <span>Buku Resep ({progress.completedMissions.length}/4)</span>
+            </button>
+          </div>
         </div>
 
         {errorName && (

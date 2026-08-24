@@ -1,11 +1,12 @@
 import React from 'react';
-import { BookOpen, Volume2, VolumeX, Home, Sparkles } from 'lucide-react';
+import { BookOpen, Volume2, VolumeX, Home, Sparkles, FileSpreadsheet } from 'lucide-react';
 import { soundManager } from '../utils/audio';
 
 interface NavbarProps {
   studentName: string;
   completedMissionsCount: number;
   onOpenRecipeBook: () => void;
+  onOpenSheetsModal?: () => void;
   onGoHome?: () => void;
   showHomeButton?: boolean;
 }
@@ -14,6 +15,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   studentName,
   completedMissionsCount,
   onOpenRecipeBook,
+  onOpenSheetsModal,
   onGoHome,
   showHomeButton = false,
 }) => {
@@ -28,7 +30,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-30 wood-texture text-[#FAF7F0] shadow-xl border-b-4 border-[#D9A441]">
+    <header className="sticky top-0 z-30 bg-[#5C3A21]/92 backdrop-blur-md text-[#FAF7F0] shadow-xl border-b-4 border-[#D9A441]">
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-2">
         {/* Brand & Title */}
         <div className="flex items-center gap-3">
@@ -71,6 +73,19 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span className="w-2 h-2 rounded-full bg-[#D9A441] animate-ping" />
               <span>Peserta: <span className="font-bold underline text-[#D9A441]">{studentName}</span></span>
             </div>
+          )}
+
+          {/* Google Sheets Rekap Button */}
+          {onOpenSheetsModal && (
+            <button
+              id="btn-nav-google-sheets"
+              onClick={onOpenSheetsModal}
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#2E7D32] hover:bg-[#1B5E20] text-[#FAF7F0] font-black text-xs shadow-md transition transform active:scale-95 border border-[#FAF7F0]/40 cursor-pointer"
+              title="Rekap & Buka Google Sheets Siswa"
+            >
+              <FileSpreadsheet className="w-4 h-4 text-[#FAF7F0]" />
+              <span>Rekap Guru</span>
+            </button>
           )}
 
           {/* Recipe Book Button */}

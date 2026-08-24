@@ -3,19 +3,21 @@ import { StudentProgress } from '../types';
 import { STORY_FRAGMENTS, MISSIONS } from '../data/missionsData';
 import { NenekAvatar } from './NenekAvatar';
 import { generateCertificatePDF, generateCertificatePNG } from '../utils/pdfGenerator';
-import { Download, Award, Sparkles, CheckCircle2, RotateCcw, Home, FileText, Image as ImageIcon } from 'lucide-react';
+import { Download, Award, Sparkles, CheckCircle2, RotateCcw, Home, FileText, Image as ImageIcon, FileSpreadsheet } from 'lucide-react';
 import { soundManager } from '../utils/audio';
 
 interface CompletionScreenProps {
   progress: StudentProgress;
   onRestartAll: () => void;
   onGoHome: () => void;
+  onOpenSheetsModal?: () => void;
 }
 
 export const CompletionScreen: React.FC<CompletionScreenProps> = ({
   progress,
   onRestartAll,
   onGoHome,
+  onOpenSheetsModal,
 }) => {
   const [isDownloadingPDF, setIsDownloadingPDF] = useState(false);
   const [isDownloadingPNG, setIsDownloadingPNG] = useState(false);
@@ -99,6 +101,17 @@ export const CompletionScreen: React.FC<CompletionScreenProps> = ({
             <ImageIcon className="w-5 h-5 text-[#5C7A5C]" />
             <span>{isDownloadingPNG ? 'Menyiapkan Gambar...' : 'Unduh Gambar (PNG HD)'}</span>
           </button>
+
+          {onOpenSheetsModal && (
+            <button
+              id="btn-sync-sheets-completion"
+              onClick={onOpenSheetsModal}
+              className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-[#2E7D32] hover:bg-[#1B5E20] text-[#FAF7F0] font-serif font-black text-sm sm:text-base border-2 border-[#FAF7F0] shadow-xl flex items-center justify-center gap-2 transition transform active:scale-95 cursor-pointer"
+            >
+              <FileSpreadsheet className="w-5 h-5 text-[#FAF7F0]" />
+              <span>Simpan ke Google Sheets</span>
+            </button>
+          )}
 
           <button
             onClick={onGoHome}
