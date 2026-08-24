@@ -15,7 +15,6 @@ import { CompletionScreen } from './components/CompletionScreen';
 import { RecipeBookModal } from './components/RecipeBookModal';
 import { MissionSuccessModal } from './components/MissionSuccessModal';
 import { FocusLostAlert } from './components/FocusLostAlert';
-import { GoogleSheetsModal } from './components/GoogleSheetsModal';
 import { BackgroundMap } from './components/BackgroundMap';
 
 const STORAGE_KEY = 'NENEK_KEBAYAN_LAB_PROGRESS_V1';
@@ -47,7 +46,6 @@ export default function App() {
   const [currentScreen, setCurrentScreen] = useState<ScreenState>('HOME');
   const [activeMissionId, setActiveMissionId] = useState<number>(1);
   const [isRecipeBookOpen, setIsRecipeBookOpen] = useState<boolean>(false);
-  const [isSheetsModalOpen, setIsSheetsModalOpen] = useState<boolean>(false);
   const [successModalData, setSuccessModalData] = useState<{
     isOpen: boolean;
     missionId: number;
@@ -212,7 +210,6 @@ export default function App() {
           studentName={progress.studentName}
           completedMissionsCount={progress.completedMissions.length}
           onOpenRecipeBook={() => setIsRecipeBookOpen(true)}
-          onOpenSheetsModal={() => setIsSheetsModalOpen(true)}
           onGoHome={() => setCurrentScreen('HOME')}
           showHomeButton={currentScreen !== 'HOME'}
         />
@@ -225,7 +222,6 @@ export default function App() {
             onUpdateName={handleUpdateName}
             onSelectMission={handleSelectMission}
             onOpenRecipeBook={() => setIsRecipeBookOpen(true)}
-            onOpenSheetsModal={() => setIsSheetsModalOpen(true)}
             onOpenCompletionSummary={() => setCurrentScreen('ALL_COMPLETED')}
           />
         )}
@@ -266,7 +262,6 @@ export default function App() {
             progress={progress}
             onRestartAll={handleRestartAll}
             onGoHome={() => setCurrentScreen('HOME')}
-            onOpenSheetsModal={() => setIsSheetsModalOpen(true)}
           />
         )}
       </main>
@@ -295,13 +290,6 @@ export default function App() {
         isOpen={isRecipeBookOpen}
         progress={progress}
         onClose={() => setIsRecipeBookOpen(false)}
-      />
-
-      {/* Google Sheets Modal */}
-      <GoogleSheetsModal
-        isOpen={isSheetsModalOpen}
-        progress={progress}
-        onClose={() => setIsSheetsModalOpen(false)}
       />
       </div>
     </div>

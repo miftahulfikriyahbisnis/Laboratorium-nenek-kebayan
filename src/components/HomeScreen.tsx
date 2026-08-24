@@ -3,7 +3,7 @@ import { MISSIONS } from '../data/missionsData';
 import { StudentProgress } from '../types';
 import { NenekAvatar } from './NenekAvatar';
 import { MissionMap } from './MissionMap';
-import { Play, Lock, CheckCircle2, BookOpen, Sparkles, User, Award, Flame, Map, LayoutGrid, FileSpreadsheet } from 'lucide-react';
+import { Play, Lock, CheckCircle2, BookOpen, Sparkles, User, Award, Flame, Map, LayoutGrid } from 'lucide-react';
 import { soundManager } from '../utils/audio';
 
 interface HomeScreenProps {
@@ -11,7 +11,6 @@ interface HomeScreenProps {
   onUpdateName: (name: string) => void;
   onSelectMission: (missionId: number) => void;
   onOpenRecipeBook: () => void;
-  onOpenSheetsModal?: () => void;
   onOpenCompletionSummary?: () => void;
 }
 
@@ -20,7 +19,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   onUpdateName,
   onSelectMission,
   onOpenRecipeBook,
-  onOpenSheetsModal,
   onOpenCompletionSummary,
 }) => {
   const [nameInput, setNameInput] = useState(progress.studentName);
@@ -113,19 +111,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
           </div>
 
           <div className="flex items-center gap-2">
-            {onOpenSheetsModal && (
-              <button
-                id="btn-open-google-sheets-home"
-                onClick={onOpenSheetsModal}
-                className="px-4 py-3 rounded-2xl bg-[#2E7D32] hover:bg-[#1B5E20] text-[#FAF7F0] font-black text-sm border-2 border-[#FAF7F0]/40 flex items-center justify-center gap-2 shadow-lg transition active:scale-95 cursor-pointer"
-                title="Buka / Hubungkan Google Sheets Rekapitulasi Siswa"
-              >
-                <FileSpreadsheet className="w-4 h-4 text-[#FAF7F0]" />
-                <span className="hidden sm:inline">Rekap Nilai Guru (Sheets)</span>
-                <span className="sm:hidden">Sheets</span>
-              </button>
-            )}
-
             <button
               id="btn-open-recipe-book-home"
               onClick={onOpenRecipeBook}
