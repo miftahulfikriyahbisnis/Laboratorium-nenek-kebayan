@@ -116,18 +116,33 @@ ATURAN KETAT DAN MUTLAK:
           parts: [{ text: m.content }],
         }));
 
-        const response = await ai.models.generateContent({
-          model: "gemini-3.7-flash",
-          contents: conversationHistory,
-          config: {
-            systemInstruction,
-            temperature: 0.7,
-          },
-        });
+        // Try candidate models in case of 503 high demand spike
+        const candidateModels = ["gemini-2.5-flash", "gemini-3.7-flash", "gemini-flash-latest"];
+        let lastError: unknown = null;
 
-        const replyText = response.text;
-        if (replyText && replyText.trim().length > 0) {
-          return res.json({ reply: replyText, isAIPowered: true });
+        for (const modelName of candidateModels) {
+          try {
+            const response = await ai.models.generateContent({
+              model: modelName,
+              contents: conversationHistory,
+              config: {
+                systemInstruction,
+                temperature: 0.7,
+              },
+            });
+
+            const replyText = response.text;
+            if (replyText && replyText.trim().length > 0) {
+              return res.json({ reply: replyText, isAIPowered: true });
+            }
+          } catch (modelErr: unknown) {
+            lastError = modelErr;
+            console.warn(`Model ${modelName} encountered error or high demand, trying next model:`, modelErr);
+          }
+        }
+
+        if (lastError) {
+          console.warn("All candidate Gemini models failed or experienced high demand, switching to pedagogical knowledge base.");
         }
       } catch (err: unknown) {
         console.warn("Gemini API call failed, switching to pedagogical knowledge base:", err);
